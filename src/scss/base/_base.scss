@@ -27,9 +27,18 @@ a {
 a:not([class]) {
   color: $link-default-color;
 }
+.router-link-active {
+  color: $link-default-color;
+}
+.router-link-exact-active {
+  text-decoration: underline;
+}
 
 @media (hover: hover) {
-  a:hover {
+  .router-link-active:hover {
+    text-decoration: underline;
+  }
+  a:not([class]):hover {
     background-color: $link-hover-bg-color;
   }
 }
