@@ -1,0 +1,19 @@
+// # Breakpoint map
+$bps: (
+  // 576pxs
+  'sm': 36em,
+  // 768pxs
+  'md': 48em,
+  // 992pxs
+  'lg': 62em,
+  // 1200pxs
+  'xl': 75em,
+  // 1400pxs
+  'xxl': 87.5em
+);
+
+// ## Screen resolutions
+$full-hd: 120em; // 1920px
+$full-hd-height: 67.5em; // 1080px
+$four-k: 240em; // 3840px
+$four-k-height: 135em; // 2160px

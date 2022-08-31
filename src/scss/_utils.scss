@@ -1,0 +1,17 @@
+// @use 'abstracts';
+@use 'tokens' as *;
+
+.container {
+  width: $container-size;
+  padding: {
+    left: $container-padding;
+    right: $container-padding;
+  }
+  display: block;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}

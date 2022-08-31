@@ -1,0 +1,15 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'abstracts' as *;
+
+$color-theme: $colors-main;
+
+$link-default-color: map-get($color-theme, link, 400, color);
+$link-hover-bg-color: map-get($color-theme, link, 400, bg);
+
+$body-color-bg: map.get($color-theme, 'neutral', 100);
+$body-color-text: map.get($color-theme, 'neutral', 800);
+$body-ff: $ff-sans-serif;
+
+$container-size: map.get($sizes, '800');
+$container-padding: map.get($spaces, '300');
