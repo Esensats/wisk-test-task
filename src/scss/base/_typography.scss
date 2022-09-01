@@ -1,0 +1,6 @@
+@use 'sass:map';
+// @use '@/scss/abstracts' as *;
+@use '@/scss/tokens' as *;
+
+$body-ff: map.get($fonts-primary, ff);
+$body-fw: map.get($fonts-primary, fw, regular);

@@ -1,2 +1,14 @@
-$ff-sans-serif: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-  Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+$fonts-sans-serif: (
+  ff:
+    "'Open Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+  fw: (
+    light: 300,
+    regular: 400,
+    semibold: 600,
+    bold: 700,
+  ),
+);
+
+// $ff-sans-serif:
+
+// $fw-sans-serif: ;

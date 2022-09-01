@@ -1,35 +1,35 @@
 $colors-main: (
-  'link': (
+  link: (
     400: (
       color: hsl(216, 75%, 50%),
       bg: hsla(221, 75%, 50%, 0.15),
     ),
   ),
-  'accent': (
+  accent: (
     400: (
       color: hsl(216, 100%, 60%),
       text: white,
     ),
   ),
-  'primary': (
-    '200': (
-      'color': hsl(208, 30%, 24%),
-      'text': white,
+  primary: (
+    200: (
+      color: hsl(208, 30%, 24%),
+      text: white,
     ),
-    '600': (
-      'color': hsl(216, 100%, 81%),
-      'text': black,
+    600: (
+      color: hsl(216, 100%, 81%),
+      text: black,
     ),
-    '700': (
-      'color': hsl(216, 97%, 88%),
-      'text': black,
+    700: (
+      color: hsl(216, 97%, 88%),
+      text: black,
     ),
-    '800': (
-      'color': hsl(218, 80%, 94%),
-      'text': black,
+    800: (
+      color: hsl(218, 80%, 94%),
+      text: black,
     ),
   ),
-  'neutral': (
+  neutral: (
     100: hsl(216, 24%, 100%),
     200: hsl(216, 24%, 75%),
     300: hsl(216, 20%, 65%),

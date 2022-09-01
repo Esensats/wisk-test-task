@@ -3,13 +3,31 @@
 @use 'abstracts' as *;
 
 $color-theme: $colors-main;
+$fonts-primary: $fonts-sans-serif;
+// $fonts-secondary: $fonts-serif;
 
-$link-default-color: map-get($color-theme, link, 400, color);
-$link-hover-bg-color: map-get($color-theme, link, 400, bg);
+$color-accent: map.get($color-theme, accent, 400, color);
 
-$body-color-bg: map.get($color-theme, 'neutral', 100);
-$body-color-text: map.get($color-theme, 'neutral', 800);
-$body-ff: $ff-sans-serif;
+$border-radius-xs: 0.25rem;
+$border-radius-sm: 0.5rem;
+$border-radius-md: 1rem;
 
-$container-size: map.get($sizes, '800');
-$container-padding: map.get($spaces, '300');
+$link-default-color: map.get($color-theme, link, 400, color);
+$link-hover-bg-color: map.get($color-theme, link, 400, bg);
+
+$body-color-bg: map.get($color-theme, neutral, 100);
+$body-color-text: map.get($color-theme, neutral, 800);
+
+$header-color-bg: map.get($color-theme, primary, 200, color);
+$header-color-text: map.get($color-theme, primary, 200, text);
+
+$container-size: map.get($sizes, 800);
+$container-widths: (
+  xs: 100%,
+  sm: map.get($bps, sm),
+  md: map.get($bps, md),
+  lg: map.get($bps, lg),
+  xl: map.get($bps, xl),
+  xxl: map.get($bps, xxl),
+);
+$container-padding: map.get($spaces, 300);

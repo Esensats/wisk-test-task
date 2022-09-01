@@ -1,8 +1,9 @@
-// @use 'abstracts';
+@use 'sass:map';
+@use 'abstracts' as *;
 @use 'tokens' as *;
 
 .container {
-  width: $container-size;
+  width: map.get($container-widths, xs);
   padding: {
     left: $container-padding;
     right: $container-padding;
@@ -13,5 +14,28 @@
   margin: {
     left: auto;
     right: auto;
+  }
+  // Media queries that make the container fixed widths on breakpoints
+  @each $key, $value in $container-widths {
+    @include mq($key) {
+      width: $value;
+    }
+  }
+}
+
+.btn {
+  display: inline-block;
+  padding: map.get($spaces, 100) map.get($spaces, 200);
+  border: none;
+  border-radius: $border-radius-sm;
+  color: map.get($color-theme, neutral, 500);
+
+  &:focus-visible {
+    outline: 2px solid map.get($color-theme, neutral, 800);
+  }
+
+  &-disabled,
+  &:disabled {
+    color: transparentize(map.get($color-theme, neutral, 800), 0.5);
   }
 }

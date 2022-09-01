@@ -1,11 +1,13 @@
 // @use 'sass:color';
 // @use '@/scss/abstracts' as *;
 @use '@/scss/tokens' as *;
+@use 'typography' as *;
 
 body {
   background: $body-color-bg;
   color: $body-color-text;
   font-family: $body-ff;
+  font-weight: $body-fw;
   min-height: 100vh;
   transition: color 0.5s, background-color 0.5s;
   text-rendering: optimizeLegibility;
@@ -27,17 +29,19 @@ a {
 a:not([class]) {
   color: $link-default-color;
 }
+.router-link-exact-active,
 .router-link-active {
   color: $link-default-color;
 }
-.router-link-exact-active {
-  text-decoration: underline;
-}
+// .router-link-exact-active {
+//   text-decoration: underline;
+// }
 
 @media (hover: hover) {
-  .router-link-active:hover {
-    text-decoration: underline;
-  }
+  // .router-link-exact-active:hover,
+  // .router-link-active:hover {
+  //   text-decoration: underline;
+  // }
   a:not([class]):hover {
     background-color: $link-hover-bg-color;
   }
