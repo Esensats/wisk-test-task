@@ -9,97 +9,217 @@ export const useOrgStructureStore = defineStore('orgStructure', () => {
   const tree = ref<OrgNode[]>([
     {
       id: 0,
-      label: 'label1',
+      label: 'Нур-Султан',
       amount: 15,
+
       nodes: [
         {
-          id: 1,
-          label: 'label2',
+          id: 20,
+          label: 'Центр 1',
           amount: 10,
           nodes: [
             {
-              id: 2,
-              label: 'label3',
+              id: 21,
+              label: 'Управление 1',
               amount: 5,
+              nodes: [
+                {
+                  id: 22,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 23,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
+            },
+            {
+              id: 24,
+              label: 'Управление 2',
+              amount: 5,
+              nodes: [
+                {
+                  id: 25,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 26,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
             },
           ],
         },
         {
-          id: 4,
-          label: 'label5',
+          id: 27,
+          label: 'Центр 2',
           amount: 10,
+          nodes: [
+            {
+              id: 28,
+              label: 'Управление 1',
+              amount: 5,
+              nodes: [
+                {
+                  id: 29,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 30,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
+            },
+            {
+              id: 31,
+              label: 'Управление 2',
+              amount: 5,
+              nodes: [
+                {
+                  id: 32,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 33,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
+            },
+          ],
         },
       ],
     },
     {
       id: 5,
-      label: 'label6',
-      amount: 15,
+      label: 'Алматы',
+      amount: 20,
       nodes: [
         {
           id: 6,
-          label: 'label7',
+          label: 'Центр 1',
           amount: 10,
           nodes: [
             {
               id: 7,
-              label: 'label8',
+              label: 'Управление 1',
               amount: 5,
+              nodes: [
+                {
+                  id: 11,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 12,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
+            },
+            {
+              id: 10,
+              label: 'Управление 2',
+              amount: 5,
+              nodes: [
+                {
+                  id: 13,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 14,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
             },
           ],
         },
         {
           id: 8,
-          label: 'label9',
+          label: 'Центр 2',
           amount: 10,
+          nodes: [
+            {
+              id: 142,
+              label: 'Управление 1',
+              amount: 5,
+              nodes: [
+                {
+                  id: 15,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 16,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
+            },
+            {
+              id: 17,
+              label: 'Управление 2',
+              amount: 5,
+              nodes: [
+                {
+                  id: 18,
+                  label: 'Отдел 1',
+                  amount: 10,
+                },
+                {
+                  id: 19,
+                  label: 'Отдел 2',
+                  amount: 10,
+                },
+              ],
+            },
+          ],
         },
       ],
     },
   ])
-
   /**
-   * Adds depth field to every object in the passed OrgNode[]
-   * @param arr Input array. GETS CHANGED
-   * @param depth Don't pass it
-   * @param index Don't pass it
+   * Calculates the total amount from all the child nodes and assigns them to "tota" of every object
+   * @param root One object whose total gets calculated and written to it
    */
-  const assignDepth = (arr: OrgNode[], depth = 0, index = 0): void => {
-    if (index < arr.length) {
-      arr[index].depth = depth
-      if (arr[index].nodes && arr[index].nodes?.length) {
-        return assignDepth(arr[index].nodes as OrgNode[], depth + 1, 0)
-      }
-      return assignDepth(arr, depth, index + 1)
+  const calcTotal = (root: OrgNode): number => {
+    let total = root.amount
+    if (root.nodes && root.nodes.length) {
+      root.nodes.forEach((node) => {
+        total += calcTotal(node)
+      })
     }
-    return
+    return (root.total = total)
   }
 
   /**
-   * With side effects. Adds "total" property to each object in OrgNode[]
-   * @param objArr
-   * @param prop
+   * Adds "depth" property to each object in OrgNode[]
+   * @param arr Array of objects to assign depth to each child object
+   * @param depth Don't pass anything to it
    */
-  const assignTotal = (objArr: OrgNode[], prop: string): number =>
-    objArr
-      .map((obj) => {
-        // console.debug(entries(obj))
-        return entries(obj).reduce(
-          (sum: number, [key, val]: (number | string)[]) =>
-            key == prop
-              ? sum + parseInt(val as string)
-              : Array.isArray(val)
-              ? (obj.total = sum + assignTotal(val, prop))
-              : 0,
-          0
-        )
-      })
-      .reduce((total, current) => total + current)
+  const addDepth = (arr: OrgNode[], depth = 0) => {
+    ;(arr || []).forEach((obj) => {
+      obj.depth = depth
+      if (obj.nodes && obj.nodes?.length) {
+        addDepth(obj.nodes, depth + 1)
+      }
+    })
+  }
 
   const tempTree = tree
   const getComputedTree = computed<OrgNode[]>(() => {
-    assignDepth(tempTree.value)
-    assignTotal(tempTree.value, 'amount')
-    // console.debug(tempTree.value)
+    addDepth(tempTree.value)
+    tempTree.value.forEach((node) => calcTotal(node))
+    console.debug(tempTree.value)
     return tempTree.value
   })
 
