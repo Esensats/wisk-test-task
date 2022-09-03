@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import entries from 'object.entries'
 
 export const useOrgStructureStore = defineStore('orgStructure', () => {
   const tree = ref<OrgNode[]>([
@@ -16,7 +15,7 @@ export const useOrgStructureStore = defineStore('orgStructure', () => {
         {
           id: 20,
           label: 'Центр 1',
-          amount: 10,
+          amount: 5,
           nodes: [
             {
               id: 21,
@@ -26,12 +25,12 @@ export const useOrgStructureStore = defineStore('orgStructure', () => {
                 {
                   id: 22,
                   label: 'Отдел 1',
-                  amount: 10,
+                  amount: 5,
                 },
                 {
                   id: 23,
                   label: 'Отдел 2',
-                  amount: 10,
+                  amount: 5,
                 },
               ],
             },
@@ -43,12 +42,12 @@ export const useOrgStructureStore = defineStore('orgStructure', () => {
                 {
                   id: 25,
                   label: 'Отдел 1',
-                  amount: 10,
+                  amount: 5,
                 },
                 {
                   id: 26,
                   label: 'Отдел 2',
-                  amount: 10,
+                  amount: 5,
                 },
               ],
             },
@@ -57,7 +56,7 @@ export const useOrgStructureStore = defineStore('orgStructure', () => {
         {
           id: 27,
           label: 'Центр 2',
-          amount: 10,
+          amount: 5,
           nodes: [
             {
               id: 28,
@@ -67,7 +66,7 @@ export const useOrgStructureStore = defineStore('orgStructure', () => {
                 {
                   id: 29,
                   label: 'Отдел 1',
-                  amount: 10,
+                  amount: 5,
                 },
                 {
                   id: 30,

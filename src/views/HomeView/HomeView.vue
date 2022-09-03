@@ -24,31 +24,53 @@ const orgStructure = useOrgStructureStore()
       <li class="org-tree-head__item"><span class="org-tree-head__span">Действия</span></li>
     </ul>
     <ul class="org-tree">
-      <TreeNode
-        v-for="node in orgStructure.getComputedTree"
-        :key="node.id"
-        :node="node"
-        class="org-tree__tree-node"
-      />
+      <TransitionGroup name="slide-fade">
+        <TreeNode
+          v-for="node in orgStructure.getComputedTree"
+          :key="`parent-node--${node.id}`"
+          :node="node"
+          class="org-tree__tree-node"
+        />
+      </TransitionGroup>
     </ul>
     <!-- </div> -->
   </main>
 </template>
 
+<style lang="scss">
+.slide-fade {
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    max-height: 0px;
+    overflow: hidden;
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.5s ease;
+    max-height: 230px;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 @use 'sass:map';
 @use 'sass:color';
 @use '@/scss' as *;
-.home {
-  max-width: 100rem;
-  margin: 0 auto;
+// .home {
+//   max-width: 100rem;
+//   margin: 0 auto;
 
-  // &__container {
-  //   padding-top: $container-padding;
-  //   padding-bottom: $container-padding;
-  // }
-}
+//   // &__container {
+//   //   padding-top: $container-padding;
+//   //   padding-bottom: $container-padding;
+//   // }
+// }
 .add {
+  padding: {
+    top: 1rem;
+    bottom: 1rem;
+  }
   &__button {
     position: relative;
     padding-left: 2em;
