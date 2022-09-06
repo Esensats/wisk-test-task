@@ -1,88 +1,62 @@
 <script setup lang="ts">
 import type OrgNode from '@/types/OrgNode'
-// import { computed } from '@vue/reactivity'
-import { ref, computed, defineProps, defineEmits, nextTick } from 'vue'
+import { useOrgStructureStore } from '@/stores/orgStructure'
+import { ref, defineProps } from 'vue'
 import ChevronIcon from './icons/ChevronIcon.vue'
+
+const emit = defineEmits<{
+  (e: 'edit', id: number): void
+  (e: 'delete', id: number): void
+}>()
 
 const props = defineProps<{
   node: OrgNode
 }>()
-const emit = defineEmits(['toggleCollapse'])
+
+const orgStructure = useOrgStructureStore()
+// orgStructure.printLabels()
 
 const showChildren = ref<boolean>(false)
 
-const countKey = ref<number>(0)
-const countDep = ref<number>(0)
-
 const treeNodeList = ref<HTMLElement | null>(null)
-// eslint-disable-next-line vue/return-in-computed-property
-const computedHeight = computed<string | undefined>(() => {
-  countDep.value
-  showChildren.value
-  treeNodeList.value
-  // console.debug('bruh')
-  console.debug(treeNodeList.value?.scrollHeight ?? 'Nah')
-  if (
-    showChildren.value === true &&
-    treeNodeList.value &&
-    (treeNodeList.value.classList.contains('slide-enter-active') ||
-      treeNodeList.value.classList.contains('slide-leave-active'))
-  ) {
-    return `max-height: ${treeNodeList.value?.scrollHeight}px`
-  } else {
-    nextTick(() => {
-      setTimeout(() => {
-        console.log('showChildren.value :>> ', props.node.label, showChildren.value)
-      }, 1000)
-      if (treeNodeList.value) {
-        console.debug('collapsed building', props.node.label)
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        treeNodeList.value.style.maxHeight = ''
-      }
-    })
-  }
-})
 
 const handleCollapseClick = (): void => {
   showChildren.value = !showChildren.value
-  // nextTick(() => {
-  //   if (showChildren.value && treeNodeList.value) {
-  //     // console.debug('triggered expand', treeNodeList.value.scrollHeight)
-  //     // setTimeout(() => {
-  //     //   console.debug('expand', props.node.label, treeNodeList.value?.scrollHeight)
-  //     // }, 1000)
-  //     treeNodeList.value.style.maxHeight = treeNodeList.value.scrollHeight + 'px'
-  //   }
-  // })
-  // if (!showChildren.value && treeNodeList.value) {
-  //   // console.debug('triggered collapse', treeNodeList.value.scrollHeight)
-  //   treeNodeList.value.style.maxHeight = '0px'
-  // }
-  // countKey.value++
-  countDep.value++
-  emit('toggleCollapse')
-  // computedHeight.value = undefined
 }
 
-const handleChildCollapse = (): void => {
-  emit('toggleCollapse')
-  countDep.value++
-
-  // setTimeout(() => {
-  //   if (showChildren.value && treeNodeList.value) {
-  //     console.debug('triggered child toggle', props.node.label, treeNodeList.value.scrollHeight)
-  //     treeNodeList.value.style.maxHeight = treeNodeList.value.scrollHeight + 'px'
-  //   }
-  // }, 350)
-  // computedHeight.value = undefined
-  // countKey.value++
-  // countDep.value++
+const handleSelect = (): void => {
+  if (orgStructure.selectedId === props.node.id) {
+    orgStructure.selectedId = null
+  } else orgStructure.selectedId = props.node.id
 }
-// onMounted(() => {})
+
+const handleEdit = () => {
+  emit('edit', props.node.id)
+}
+const handleChildEdit = (id: number): void => {
+  emit('edit', id)
+}
+
+const handleDelete = (): void => {
+  emit('delete', props.node.id)
+}
+const handleChildDelete = (id: number): void => {
+  emit('delete', id)
+}
+
+// const handleEdit = (): void => {}
 </script>
 
 <template>
-  <li class="tree-node" :key="`child-node-main--${node.id}`">
+  <li
+    class="tree-node"
+    :class="{
+      'tree-node--selected': orgStructure.selectedId === node.id,
+    }"
+    :key="`child-node-main--${node.id}`"
+    @click.stop="handleSelect"
+    @dblclick.stop="handleCollapseClick"
+  >
     <ul class="tree-node__info">
       <li class="tree-node__info-item">
         <div
@@ -97,65 +71,74 @@ const handleChildCollapse = (): void => {
             }"
             @click="handleCollapseClick"
           />
-          <span class="tree-node__label" :style="!node.nodes ? 'margin-left: 1.5rem' : ''">{{
+          <span class="tree-node__label" :style="!node.nodes ? 'margin-left: 2rem' : ''">{{
             node.label
           }}</span>
         </div>
       </li>
       <li class="tree-node__info-item">{{ node.total }}</li>
       <li class="tree-node__info-item">{{ node.amount }}</li>
-      <li class="tree-node__info-item">Edit, Delete</li>
+      <li class="tree-node__info-item">
+        <form @submit.prevent="handleEdit">
+          <button type="submit" class="tree-node__action">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              class="tree-node__action-edit"
+            >
+              <path
+                d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+              />
+            </svg>
+          </button>
+        </form>
+        <form @submit.prevent="handleDelete">
+          <button type="submit" class="tree-node__action">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 320 512"
+              class="tree-node__action-delete"
+            >
+              <path
+                d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"
+              />
+            </svg>
+          </button>
+        </form>
+      </li>
     </ul>
-    <TransitionGroup name="slide">
-      <ul
-        :style="computedHeight"
-        class="tree-node__list"
-        ref="treeNodeList"
-        v-if="showChildren"
-        :key="`child-node-list--${countKey}--${node.id}`"
-      >
-        <!-- <div class="container tree-node__list-container"> -->
-        <TreeNode
-          v-for="subnode in node.nodes"
-          @toggleCollapse="handleChildCollapse"
-          :key="`child-node--${countKey}--${subnode.id}`"
-          :node="subnode"
-        />
-        <!-- </div> -->
-      </ul>
-    </TransitionGroup>
+    <ul
+      class="tree-node__list"
+      ref="treeNodeList"
+      v-if="showChildren"
+      :key="`child-node-list--${node.id}`"
+    >
+      <!-- <div class="container tree-node__list-container"> -->
+      <TreeNode
+        @edit="handleChildEdit"
+        @delete="handleChildDelete"
+        v-for="subnode in node.nodes"
+        :key="`child-node--${subnode.id}`"
+        :node="subnode"
+      />
+      <!-- </div> -->
+    </ul>
   </li>
 </template>
 
-<style lang="scss">
-.tree-node__list {
-  transition: all 0.5s ease;
-  overflow: hidden;
-}
-.slide {
-  &-enter-from,
-  &-leave-to {
-    max-height: 0px;
-  }
-  // &-enter-active,
-  // &-leave-active {
-  //   position: absolute;
-  // }
-  // &-enter-to,
-  // &-leave-from {
-  //   height: auto;
-  // }
-}
-</style>
-
 <style scoped lang="scss">
+@use 'sass:map';
+@use '@/scss/tokens' as *;
 .tree-node {
   box-shadow: inset 0 -0.5px 0 0 white;
+  cursor: pointer;
 
   // &__list {
   //   overflow: hidden;
   // }
-
+  &--selected {
+    outline: 2px solid map.get($color-theme, accent, 600, color);
+  }
   &__info {
     margin: 0;
     padding: 0;
@@ -173,6 +156,10 @@ const handleChildCollapse = (): void => {
       display: flex;
       align-items: center;
     }
+    &-item {
+      display: flex;
+      align-items: center;
+    }
   }
   &__collapse-icon {
     // display: block;
@@ -180,17 +167,45 @@ const handleChildCollapse = (): void => {
     margin-right: 0.5rem;
     cursor: pointer;
     transform: rotate(180deg);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease-out;
 
     &--collapsed {
       transform: rotate(90deg);
     }
+    &:hover {
+      fill: map.get($color-theme, neutral, 500);
+    }
   }
-
-  // &__list {
-  //   &-container {
-  //     padding: 0;
-  //   }
-  // }
+  &__action {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    & > svg {
+      transition: all 0.2s ease;
+    }
+    &-edit {
+      height: 1.35rem;
+      fill: map.get($color-theme, primary, 200, color);
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+      &:hover {
+        fill: map.get($color-theme, neutral, 500);
+      }
+    }
+    &-delete {
+      height: 1rem;
+      width: 1rem;
+      box-sizing: content-box;
+      padding: 0.25rem;
+      fill: map.get($color-theme, neutral, 100);
+      background-color: map.get($color-theme, primary, 200, color);
+      border-radius: 50%;
+      &:hover {
+        background-color: map.get($color-theme, neutral, 500);
+      }
+    }
+  }
 }
 </style>

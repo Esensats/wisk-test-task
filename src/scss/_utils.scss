@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 @use 'abstracts' as *;
 @use 'tokens' as *;
 
@@ -29,13 +30,39 @@
   border: none;
   border-radius: $border-radius-sm;
   color: map.get($color-theme, neutral, 500);
+  background-color: map.get($color-theme, neutral, 150);
+  transition: all 0.15s ease, box-shadow 0.1s ease;
+
+  &:hover {
+    background-color: map.get($color-theme, neutral, 200);
+    color: map.get($color-theme, neutral, 700);
+  }
+  &:active {
+    box-shadow: $bs-inset;
+  }
 
   &:focus-visible {
-    outline: 2px solid map.get($color-theme, neutral, 800);
+    // outline: 2px solid map.get($color-theme, neutral, 800);
+    outline: none;
+    box-shadow: $bs-outline;
   }
 
   &-disabled,
   &:disabled {
     color: transparentize(map.get($color-theme, neutral, 800), 0.5);
+  }
+
+  &-primary {
+    background-color: map.get($color-theme, neutral, 500);
+    color: map.get($color-theme, neutral, 150);
+  }
+}
+
+.backdrop-blur {
+  background-color: color.scale(map.get($color-theme, neutral, 100), $alpha: -10%);
+  @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    background-color: color.scale(map.get($color-theme, neutral, 100), $alpha: -30%);
+    -webkit-backdrop-filter: blur(1em);
+    backdrop-filter: blur(1em);
   }
 }

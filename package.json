@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.8",
-    "object.entries": "^1.1.5",
     "pinia": "^2.0.17",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"
